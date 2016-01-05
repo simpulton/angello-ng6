@@ -1,8 +1,21 @@
-<nav class="navbar">
-  <div class="logo">
-    <h1><a ui-sref="home">{{ vm.name }}</a></h1>
+<div class="navbar navbar-fixed-top navbar-default">
+  <div class="navbar-header pull-left">
+    <a class="logo navbar-brand" href="#/">
+      <img src="../../assets/img/angello.png">
+    </a>
   </div>
-  <div class="nav-links">
-    <span><a ui-sref="about">about</a></span>
+  <div class="btn-group pull-right">
+    <a class="btn btn-danger" href="#/">
+      <span class="glyphicon glyphicon-home"></span>
+    </a>
+    <a class="btn btn-danger" href="#/users">
+      <span class="glyphicon glyphicon-user"></span>
+    </a>
+    <a class="btn btn-danger" href="#/dashboard">
+      <span class="glyphicon glyphicon-signal"></span>
+    </a>
+    <button class="btn btn-default" ng-click="main.logout()">
+      <span class="glyphicon glyphicon-log-out"></span>
+    </button>
   </div>
-</nav>
+</div>
