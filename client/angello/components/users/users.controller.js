@@ -1,14 +1,14 @@
 class UsersController {
-  constructor(
-    // UsersModel,
-    $scope, $log, $timeout
-  ) {
+  constructor(UsersModel, $log) {
     'ngInject';
 
-    var vm = this;
+    let vm = this;
 
     vm.newUser = { name: '', email: '' };
     vm.users = {};
+
+    vm.UsersModel = UsersModel;
+    vm.$log = $log;
 
     vm.getUsers();
   }
@@ -26,46 +26,53 @@ class UsersController {
   };
 
   getUsers() {
-    // UsersModel.all()
-    //   .then(function (result) {
-    //       vm.users = (result !== 'null') ? result : {};
-    //       $log.debug('RESULT', result);
-    //   }, function (reason) {
-    //       $log.debug('ERROR', reason);
-    //   });
+    let vm = this;
+    vm.UsersModel.all()
+      .then(function (result) {
+          vm.users = (result !== 'null') ? result : {};
+          vm.$log.debug('RESULT', result);
+      }, function (reason) {
+          vm.$log.debug('ERROR', reason);
+      });
   };
 
   addUser() {
-    // UsersModel.create(angular.copy(vm.newUser))
-    //   .then(function (result) {
-    //       vm.getUsers();
-    //       vm.newUser = { name: '', email: '' };
-    //       resetForm();
-    //       $log.debug('RESULT', result);
-    //   }, function (reason) {
-    //       $log.debug('ERROR', reason);
-    //   });
+    let vm = this;
+
+    vm.UsersModel.create(angular.copy(vm.newUser))
+      .then(function (result) {
+          vm.getUsers();
+          vm.newUser = { name: '', email: '' };
+          vm.resetForm();
+          vm.$log.debug('RESULT', result);
+      }, function (reason) {
+          vm.$log.debug('ERROR', reason);
+      });
   };
 
   updateUser(id, user) {
-    // if (vm.userForm.$valid) {
-    //   UsersModel.update(id, user)
-    //       .then(function (result) {
-    //           $log.debug('RESULT', result);
-    //       }, function (reason) {
-    //           $log.debug('ERROR', reason);
-    //       });
-    // }
+    let vm = this;
+
+    if (vm.userForm.$valid) {
+      vm.UsersModel.update(id, user)
+          .then(function (result) {
+              vm.$log.debug('RESULT', result);
+          }, function (reason) {
+              vm.$log.debug('ERROR', reason);
+          });
+    }
   };
 
   removeUser(id) {
-    // UsersModel.destroy(id)
-    //   .then(function (result) {
-    //       vm.getUsers();
-    //       $log.debug('RESULT', result);
-    //   }, function (reason) {
-    //       $log.debug('ERROR', reason);
-    //   });
+    let vm = this;
+    
+    vm.UsersModel.destroy(id)
+      .then(function (result) {
+          vm.getUsers();
+          vm.$log.debug('RESULT', result);
+      }, function (reason) {
+          vm.$log.debug('ERROR', reason);
+      });
   };
 }
 
