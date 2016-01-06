@@ -17,12 +17,12 @@ let root = 'client';
 // helper method for resolving paths
 let resolveToApp = (glob) => {
   glob = glob || '';
-  return path.join(root, 'app', glob); // app/{glob}
+  return path.join(root, 'angello', glob); // angello/{glob}
 };
 
 let resolveToComponents = (glob) => {
   glob = glob || '';
-  return path.join(root, 'app/components', glob); // app/components/{glob}
+  return path.join(root, 'angello/components', glob); // angello/components/{glob}
 };
 
 // map of all paths
@@ -33,7 +33,7 @@ let paths = {
     resolveToApp('**/*.html'),
     path.join(root, 'index.html')
   ],
-  entry: path.join(root, 'app/app.js'),
+  entry: path.join(root, 'angello/app.js'),
   output: root,
   blankTemplates: path.join(__dirname, 'generator', 'component/**/*.**')
 };
