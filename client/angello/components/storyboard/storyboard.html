@@ -1,4 +1,195 @@
-<div>
-  <br><br><br>
-  <h1>{{ vm.name }} Storyboard :D</h1>
+<!-- STORIES -->
+<div class="list-area-animation"
+     ng-class="{'list-area-expanded':!vm.detailsVisible}">
+    <div class="list-wrapper">
+        <ul class="list my-repeat-animation"
+            ng-repeat="status in vm.statuses">
+            <h3 class="status">{{status.name}}</h3>
+            <hr/>
+            <li userstory
+                ng-repeat="story in vm.stories | filter: {status:status.name}"
+                drag-container="story" mime-type="application/x-angello-status"
+                drop-container="" accepts="['application/x-angello-status']"
+                class="story my-repeat-animation"
+                ng-click="vm.setCurrentStory(story)">
+
+                <div drop-target="top" on-drag-enter="vm.insertAdjacent(story, data, true)" on-drop="vm.finalizeDrop(data)"></div>
+                <div drop-target="bottom" on-drag-enter="vm.insertAdjacent(story, data, false)" on-drop="vm.finalizeDrop(data)"></div>
+
+                <article>
+                    <div>
+                        <button type="button" class="close" ng-click="userStory.deleteStory(story.id)">
+                            ×
+                        </button>
+                        <p class="title">{{story.title}}</p>
+                    </div>
+                    <div class="type-bar {{story.type}}"></div>
+                    <div>
+                        <p>{{story.description}}</p>
+                    </div>
+                </article>
+            </li>
+            <div
+                class="emptystatus"
+                drop-container="" accepts="['application/x-angello-status']"
+                on-drop="vm.finalizeDrop(data)"
+                on-drag-enter="vm.changeStatus(data, status)"
+                ng-if="vm.isEmptyStatus(status)">
+            </div>
+        </ul>
+    </div>
+</div>
+
+
+<!-- STORY DETAILS -->
+<div class="details details-animation"
+     ng-class="{'details-visible':vm.detailsVisible}">
+    <div class="details-nav">
+        <div ng-if="!vm.detailsVisible">
+            <button class="btn pull-left btn-default"
+                    ng-click="vm.setDetailsVisible(true)">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+        </div>
+        <div ng-if="vm.detailsVisible">
+            <button class="btn pull-right btn-default"
+                    ng-click="vm.setDetailsVisible(false)">
+                <span class="glyphicon glyphicon-arrow-right"></span>
+            </button>
+        </div>
+    </div>
+
+    <div ng-if="vm.detailsVisible" class="my-fade-animation">
+        <h3>Card Details</h3>
+
+        <form name="vm.detailsForm" novalidate="">
+            <div class="form-group">
+                <div class="controls">
+                    <label class="control-label" for="inputTitle">*Title</label>
+                    <input class="form-control" type="text" id="inputTitle" name="inputTitle"
+                           placeholder="Title" ng-model="vm.editedStory.title"
+                           ng-required="true" ng-minlength="3" ng-maxlength="30">
+
+                    <div class="alert alert-warning"
+                         ng-messages="vm.detailsForm.inputTitle.$error"
+                         ng-if="vm.showMessages('inputTitle')">
+
+                        <div ng-message="required">
+                            <small>Required!</small>
+                        </div>
+                        <div ng-message="minlength">
+                            <small>Too short!</small>
+                        </div>
+                        <div ng-message="maxlength">
+                            <small>Too long!</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="inputStatus">*Status</label>
+
+                <div class="controls">
+                    <select id="inputStatus" name="inputStatus" class="form-control" ng-model="vm.editedStory.status" ng-options="l.name as l.name for l in vm.statuses" ng-required="true">
+                        <option value="">Select Status</option>
+                    </select>
+
+                    <div
+                      ng-class="{'alert alert-error alert-warning': vm.detailsForm.inputStatus.$invalid}"
+                      ng-messages="vm.detailsForm.inputStatus.$error"
+                      ng-if="vm.showMessages('inputStatus')">
+
+                      <div ng-message="required">
+                        <small>Required!</small>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="inputType">*Type</label>
+
+                <div class="controls">
+                    <select id="inputType" name="inputType" class="form-control" ng-model="vm.editedStory.type" ng-options="t.name as t.name for t in vm.types" ng-required="true">
+                        <option value="">Select Type</option>
+                    </select>
+
+                    <div
+                      ng-class="{'alert alert-error alert-warning': vm.detailsForm.inputType.$invalid}"
+                      ng-messages="vm.detailsForm.inputType.$error"
+                      ng-if="vm.showMessages('inputType')">
+
+                      <div ng-message="required">
+                        <small>Required!</small>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="inputDescription">Description</label>
+
+                <div class="controls">
+                    <textarea id="inputDescription" name="inputDescription" class="form-control" placeholder="Description" rows="3" ng-model="vm.editedStory.description"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="inputAcceptance">Acceptance Criteria</label>
+
+                <div class="controls">
+                    <textarea id="inputAcceptance" name="inputAcceptance" class="form-control" placeholder="Acceptance Criteria" rows="3" ng-model="vm.editedStory.criteria"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">*Reporter</label>
+
+                <div class="controls">
+                    <select ng-model="vm.editedStory.reporter" class="form-control"
+                        name="inputReporter" ng-required="true" ng-options="user.id as user.name for user in vm.users">
+                        <option value="">Please select...</option>
+                    </select>
+                    <div ng-class="{'alert alert-error alert-warning': vm.detailsForm.inputReporter.$invalid}"
+                         ng-messages="vm.detailsForm.inputReporter.$error"
+                         ng-if="vm.showMessages('inputReporter')">
+
+                      <div ng-message="required">
+                        <small>Required!</small>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">*Assignee</label>
+
+                <div class="controls">
+                    <select ng-model="vm.editedStory.assignee" class="form-control"
+                        name="inputAssignee" ng-required="true" ng-options="user.id as user.name for user in vm.users">
+                        <option value="">Please select...</option>
+                    </select>
+
+                    <div
+                      ng-class="{'alert alert-error alert-warning': vm.detailsForm.inputAssignee.$invalid}"
+                      ng-messages="vm.detailsForm.inputAssignee.$error"
+                      ng-if="vm.showMessages('inputAssignee')">
+
+                      <div ng-message="required">
+                        <small>Required!</small>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <div ng-if="vm.currentStory">
+            <button class="btn btn-default" ng-click="vm.updateCancel()">
+                Cancel
+            </button>
+            <button class="btn pull-right btn-default"
+                    ng-disabled="vm.detailsForm.$invalid"
+                    ng-click="vm.updateStory()">Update</button>
+        </div>
+        <div ng-if="!vm.currentStory">
+            <button class="btn pull-right btn-default"
+                    ng-disabled="vm.detailsForm.$invalid"
+                    ng-click="vm.createStory()">New Storyboard</button>
+        </div>
+    </div>
 </div>

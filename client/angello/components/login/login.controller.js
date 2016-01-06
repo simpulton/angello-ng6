@@ -1,6 +1,19 @@
 class LoginController {
-  constructor() {
-    this.name = 'login';
+  constructor(
+    // , LoginService
+    $log
+  ) {
+    'ngInject';
+
+    var vm = this;
+
+    // LoginService.login({
+    //   container: 'login-container'
+    // }, function() {
+    //   $location.path('/');
+    // }, function(error) {
+    //   $log.error("There's an error logging in", error);
+    // });
   }
 }
 

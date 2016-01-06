@@ -1,5 +1,6 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
+import ngMessages from 'angular-messages';
 import angularComponent from 'angular-component';
 import 'bootstrap-css-only';
 import Common from './common/common';
@@ -9,6 +10,7 @@ import 'normalize.css';
 
 angular.module('app', [
   ngRoute,
+  ngMessages,
   Common.name,
   Components.name
 ])
@@ -18,25 +20,19 @@ angular.module('app', [
 
   $routeProvider
     .when('/', {
-        templateUrl: 'angello/components/storyboard/storyboard.html',
-        // controller: 'StoryboardCtrl',
-        // controllerAs: 'storyboard',
-        // requiresLogin: true
+        template: '<storyboard></storyboard>',
+        requiresLogin: true
     })
     .when('/dashboard', {
-        templateUrl: 'angello/components/dashboard/dashboard.html',
-        // controller: 'DashboardCtrl',
-        // controllerAs: 'dashboard',
-        // requiresLogin: true
+        template: '<dashboard></dashboard>',
+        requiresLogin: true
     })
     .when('/users', {
-        templateUrl: 'angello/components/users/users.html',
-        // controller: 'UsersCtrl',
-        // controllerAs: 'users',
-        // requiresLogin: true
+        template: '<users></users>',
+        requiresLogin: true
     })
     .when('/users/:userId', {
-        templateUrl: 'angello/components/users/user.html',
+        template: '<user></user>',
         // controller: 'UserCtrl',
         // controllerAs: 'myUser',
         // requiresLogin: true,
@@ -53,11 +49,24 @@ angular.module('app', [
         // }
     })
     .when('/login', {
-        templateUrl: 'angello/components/login/login.html',
-        // controller: 'LoginCtrl',
-        // controllerAs: 'login'
+        template: '<login></login>',
     })
     .otherwise({redirectTo: '/'});
 })
+
+.value('STORY_STATUSES', [
+    {name: 'To Do'},
+    {name: 'In Progress'},
+    {name: 'Code Review'},
+    {name: 'QA Review'},
+    {name: 'Verified'}
+])
+
+.value('STORY_TYPES', [
+    {name: 'Feature'},
+    {name: 'Enhancement'},
+    {name: 'Bug'},
+    {name: 'Spike'}
+])
 
 .component('app', AngelloComponent);
