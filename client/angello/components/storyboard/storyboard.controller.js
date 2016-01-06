@@ -1,46 +1,56 @@
 class StoryboardController {
   constructor(
-    // StoriesModel, UsersModel,
-    $scope, $log, STORY_STATUSES, STORY_TYPES
+    StoriesModel, UsersModel, $scope, $log, STORY_STATUSES, STORY_TYPES
   ) {
     'ngInject';
 
     let vm = this;
 
-    vm.name = 'storyboard';
+    vm.types = STORY_TYPES;
+    vm.statuses = STORY_STATUSES;
+    vm.StoriesModel = StoriesModel;
+    vm.UsersModel = UsersModel;
+    vm.$log = $log;
 
+    $scope.$on('storyDeleted', function() {
+      vm.getStories();
+      vm.resetForm();
+    });
+
+    vm.getStories();
+    vm.getUsers();
+    vm.initializeControllerProperties();
+  }
+
+  initializeControllerProperties() {
+    let vm = this;
+
+    vm.name = 'storyboard';
     vm.detailsVisible = true;
     vm.currentStoryId = null;
     vm.currentStory = null;
     vm.editedStory = {};
     vm.stories = [];
-
-    vm.types = STORY_TYPES;
-    vm.statuses = STORY_STATUSES;
-
     vm.users = {};
+  }
 
-    // UsersModel.all()
-    //   .then(function(result) {
-    //     vm.users = (result !== null && result.length > 0) ? result : [{
-    //       name: 'Please create a user'
-    //     }];
-    //     $log.debug('RESULT', result);
-    //   }, function(reason) {
-    //     $log.debug('REASON', reason);
-    //   });
+  getUsers() {
+    let vm = this;
 
-    // $scope.$on('storyDeleted', function() {
-    //   vm.getStories();
-    //   vm.resetForm();
-    // });
-    //
-    // vm.getStories();
+    vm.UsersModel.all()
+      .then(function(result) {
+        vm.users = (result !== null && result.length > 0) ? result : [{
+          name: 'Please create a user'
+        }];
+        vm.$log.debug('RESULT', result);
+      }, function(reason) {
+        vm.$log.debug('REASON', reason);
+      });
   }
 
   setCurrentStory(story) {
     var vm = this;
-    $log.debug(story);
+    vm.$log.debug(story);
     vm.currentStoryId = story.id;
     vm.currentStory = story;
     vm.editedStory = angular.copy(vm.currentStory);
@@ -48,24 +58,24 @@ class StoryboardController {
 
   getStories() {
     var vm = this;
-    StoriesModel.all()
+    vm.StoriesModel.all()
       .then(function(result) {
         vm.stories = (result !== 'null') ? result : {};
-        $log.debug('RESULT', result);
+        vm.$log.debug('RESULT', result);
       }, function(reason) {
-        $log.debug('REASON', reason);
+        vm.$log.debug('REASON', reason);
       });
   };
 
   createStory() {
     var vm = this;
-    StoriesModel.create(vm.editedStory)
+    vm.StoriesModel.create(vm.editedStory)
       .then(function(result) {
         vm.getStories();
         vm.resetForm();
-        $log.debug('RESULT', result);
+        vm.$log.debug('RESULT', result);
       }, function(reason) {
-        $log.debug('ERROR', reason);
+        vm.$log.debug('ERROR', reason);
       });
   };
 
@@ -77,13 +87,13 @@ class StoryboardController {
       vm.currentStory[field] = vm.editedStory[field]
     });
 
-    StoriesModel.update(vm.currentStoryId, vm.editedStory)
+    vm.StoriesModel.update(vm.currentStoryId, vm.editedStory)
       .then(function(result) {
         vm.getStories();
         vm.resetForm();
-        $log.debug('RESULT', result);
+        vm.$log.debug('RESULT', result);
       }, function(reason) {
-        $log.debug('REASON', reason);
+        vm.$log.debug('REASON', reason);
       });
   };
 
@@ -145,11 +155,11 @@ class StoryboardController {
 
   finalizeDrop(story) {
     var vm = this;
-    StoriesModel.update(story.id, story)
+    vm.StoriesModel.update(story.id, story)
       .then(function(result) {
-        $log.debug('RESULT', result);
+        vm.$log.debug('RESULT', result);
       }, function(reason) {
-        $log.debug('REASON', reason);
+        vm.$log.debug('REASON', reason);
       });
   };
 

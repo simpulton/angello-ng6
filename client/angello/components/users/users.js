@@ -3,6 +3,7 @@ import uiRouter from 'angular-ui-router';
 import usersComponent from './users.component';
 import userModule from './user/user';
 import UsersModel from './UsersModel';
+import userStoryDirective from './userStoryDirective';
 
 let usersModule = angular.module('users', [
   uiRouter,
@@ -10,6 +11,8 @@ let usersModule = angular.module('users', [
 ])
 
 .service('UsersModel', UsersModel)
+
+.directive('userstory', userStoryDirective)
 
 .component('users', usersComponent);
 

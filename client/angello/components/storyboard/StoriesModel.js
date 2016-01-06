@@ -1,40 +1,57 @@
-angular.module('Angello.Common')
-    .service('StoriesModel',
-        function ($http, EndpointConfigService, UtilsService) {
-            var service = this,
-                MODEL = '/stories/';
+class StoriesModel {
+  constructor($http, EndpointConfigService, UtilsService) {
+    'ngInject';
+    let service = this;
 
-            service.all = function () {
-                return $http.get(EndpointConfigService.getUrl(
-                    MODEL + EndpointConfigService.getCurrentFormat()))
-                        .then(
-                            function(result) {
-                                return UtilsService.objectToArray(result);
-                            }
-                        );
-            };
+    service.MODEL = '/stories/';
+    service.$http = $http;
+    service.EndpointConfigService = EndpointConfigService;
+    service.UtilsService = UtilsService;
+  }
 
-            service.fetch = function (story_id) {
-                return $http.get(
-                    EndpointConfigService.getUrlForId(MODEL, story_id)
-                );
-            };
+  all() {
+    let service = this;
 
-            service.create = function (story) {
-                return $http.post(
-                    EndpointConfigService.getUrl(MODEL + EndpointConfigService.getCurrentFormat()), story
-                );
-            };
+      return service.$http.get(service.EndpointConfigService.getUrl(
+          service.MODEL + service.EndpointConfigService.getCurrentFormat()))
+              .then(
+                  function(result) {
+                      return service.UtilsService.objectToArray(result);
+                  }
+              );
+  };
 
-            service.update = function (story_id, story) {
-                return $http.put(
-                    EndpointConfigService.getUrlForId(MODEL, story_id), story
-                );
-            };
+  fetch(story_id) {
+    let service = this;
 
-            service.destroy = function (story_id) {
-                return $http.delete(
-                    EndpointConfigService.getUrlForId(MODEL, story_id)
-                );
-            };
-        });
+      return service.$http.get(
+          service.EndpointConfigService.getUrlForId(service.MODEL, story_id)
+      );
+  };
+
+  create(story) {
+    let service = this;
+
+      return service.$http.post(
+          service.EndpointConfigService.getUrl(service.MODEL + service.EndpointConfigService.getCurrentFormat()), story
+      );
+  };
+
+  update(story_id, story) {
+    let service = this;
+
+      return service.$http.put(
+          service.EndpointConfigService.getUrlForId(service.MODEL, story_id), story
+      );
+  };
+
+  destroy(story_id) {
+    let service = this;
+
+      return service.$http.delete(
+          service.EndpointConfigService.getUrlForId(service.MODEL, story_id)
+      );
+  };
+}
+
+export default StoriesModel;
