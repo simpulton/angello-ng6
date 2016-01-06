@@ -33,8 +33,8 @@ let paths = {
     resolveToApp('**/*.html'),
     path.join(root, 'index.html')
   ],
-  entry: path.join(root, 'angello/app.js'),
-  output: root,
+  entry: path.join(root, 'angello/angello.js'),
+  output: path.join(root, 'build'),
   blankTemplates: path.join(__dirname, 'generator', 'component/**/*.**')
 };
 
