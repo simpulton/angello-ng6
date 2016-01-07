@@ -1,8 +1,5 @@
 class DashboardController {
-  constructor(
-    // StoriesModel,
-    STORY_STATUSES, STORY_TYPES
-  ) {
+  constructor(StoriesModel, STORY_STATUSES, STORY_TYPES) {
     'ngInject';
 
     var vm = this;
@@ -10,14 +7,14 @@ class DashboardController {
     vm.statuses = STORY_STATUSES;
     vm.stories = [];
 
-    // StoriesModel.all()
-    //     .then(function (stories) {
-    //         var arr = [];
-    //         for (var key in stories) {
-    //             arr.push(stories[key]);
-    //         }
-    //         vm.stories = arr;
-    //     });
+    StoriesModel.all()
+        .then(function (stories) {
+            var arr = [];
+            for (var key in stories) {
+                arr.push(stories[key]);
+            }
+            vm.stories = arr;
+        });
   }
 }
 

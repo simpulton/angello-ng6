@@ -1,3 +1,4 @@
+var webpack = require("webpack");
 
 module.exports = {
   devtool: 'sourcemap',
@@ -14,5 +15,10 @@ module.exports = {
        { test: /\.(eot|woff|woff2|svg|ttf)$/, loader: 'file-loader?name=fonts/[name].[ext]' },
        {test: /\.(jpe?g|png|gif|svg)$/i, loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]' }
     ]
-  }
+  },
+  plugins: [
+      new webpack.ProvidePlugin({
+          jQuery: "jquery"
+      })
+  ]
 };
