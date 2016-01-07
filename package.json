@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "angular": "^1.5.0-rc.0",
+    "angular-animate": "^1.5.0-rc.0",
     "angular-component": "git://github.com/toddmotto/angular-component",
     "angular-jwt": "0.0.9",
     "angular-messages": "^1.5.0-rc.0",
@@ -16,6 +17,7 @@
     "auth0-lock": "^8.1.1",
     "bootstrap-css-only": "^3.3.5",
     "flot": "^0.8.0-alpha",
+    "gsap": "^1.18.2",
     "install": "^0.4.1",
     "jquery": "^2.1.4",
     "lodash": "^3.8.0",

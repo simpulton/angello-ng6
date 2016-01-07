@@ -1,6 +1,7 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 import ngMessages from 'angular-messages';
+import ngAnimate from 'angular-animate';
 import 'auth0-angular';
 import angularJwt from 'angular-jwt';
 import angularStorage from 'angular-storage';
@@ -14,6 +15,7 @@ import 'normalize.css';
 angular.module('angello', [
   ngRoute,
   ngMessages,
+  ngAnimate,
   'auth0',
   angularJwt,
   angularStorage,
