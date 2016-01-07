@@ -1,7 +1,9 @@
 import angular from 'angular';
 import Navbar from './navbar/navbar';
-import EndpointConfigService from './services/EndpointConfigService';
 import UtilsService from './services/UtilsService';
+import EndpointConfigService from './services/EndpointConfigService';
+import LoginService from './services/LoginService';
+import LoadingService from './services/LoadingService';
 import './common.styl';
 
 let commonModule = angular.module('app.common', [
@@ -12,6 +14,10 @@ let commonModule = angular.module('app.common', [
 .constant('CURRENT_BACKEND', 'firebase')
 
 .service('EndpointConfigService', EndpointConfigService)
+
+.service('LoginService', LoginService)
+
+.service('LoadingService', LoadingService)
 
 .service('UtilsService', UtilsService);
 

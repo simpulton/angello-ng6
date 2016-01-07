@@ -7,7 +7,7 @@ let appComponent = {
   bindings: {},
   template,
   controller,
-  controllerAs: 'vm'
+  controllerAs: 'main'
 };
 
 export default appComponent;

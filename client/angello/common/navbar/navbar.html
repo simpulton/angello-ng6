@@ -1,21 +1,21 @@
 <div class="navbar navbar-fixed-top navbar-default">
-  <div class="navbar-header pull-left">
-    <a class="logo navbar-brand" href="#/">
-      <img src="../../assets/img/angello.png">
-    </a>
-  </div>
-  <div class="btn-group pull-right">
-    <a class="btn btn-danger" href="#/">
-      <span class="glyphicon glyphicon-home"></span>
-    </a>
-    <a class="btn btn-danger" href="#/users">
-      <span class="glyphicon glyphicon-user"></span>
-    </a>
-    <a class="btn btn-danger" href="#/dashboard">
-      <span class="glyphicon glyphicon-signal"></span>
-    </a>
-    <a class="btn btn-default" href="#/login" ng-click="main.logout()">
-      <span class="glyphicon glyphicon-log-out"></span>
-    </a>
-  </div>
+    <div class="navbar-header pull-left">
+        <a class="logo navbar-brand" href="#/">
+            <img src="assets/img/angello.png">
+        </a>
+    </div>
+    <div class="btn-group pull-right" ng-show="vm.currentUser">
+        <a class="btn btn-danger" href="#/">
+            <span class="glyphicon glyphicon-home"></span>
+        </a>
+        <a class="btn btn-danger" href="#/users">
+            <span class="glyphicon glyphicon-user"></span>
+        </a>
+        <a class="btn btn-danger" href="#/dashboard">
+            <span class="glyphicon glyphicon-signal"></span>
+        </a>
+        <button class="btn btn-default" ng-click="vm.logout()">
+            <span class="glyphicon glyphicon-log-out"></span>
+        </button>
+    </div>
 </div>

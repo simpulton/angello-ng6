@@ -1,78 +1,105 @@
-angular.module('Angello.Common')
-    .service('LoginService',
-        function ($rootScope, LoadingService, EndpointConfigService, auth, store,
-            CURRENT_BACKEND, $log, $location, jwtHelper) {
-            var service = this;
+class LoginService {
+  constructor($rootScope, auth, store,
+            CURRENT_BACKEND, $log, $location, jwtHelper, EndpointConfigService) {
+    'ngInject';
 
-            function saveUserAndProfile(profile, token) {
-              store.set('profile', profile);
-              $rootScope.$broadcast('onLogin', profile);
-              $rootScope.$broadcast('onCurrentUserId', profile.user_id);
-              store.set('id_token', token);
-            }
+    let service = this;
 
-            var loginCallback;
-            if (CURRENT_BACKEND === 'firebase') {
-                loginCallback = function(onLogin, error) {
-                  return function(profile, token) {
-                    saveUserAndProfile(profile, token);
-                    auth.getToken({
-                        api: 'firebase'
-                    }).then(function(token) {
-                        store.set('userToken', token.id_token);
-                        onLogin(profile, token.id_token);
-                    }, function(err) {
-                        error(err);
-                        $log.error("Error getting Firebase token", err);
-                    });
-                  }
-                };
-            } else {
-                loginCallback = function(onLogin) {
-                  return function(profile, token) {
-                    saveUserAndProfile(profile, token);
-                    store.set('userToken', token);
-                    onLogin(profile, token);
-                  }
-                };
-            }
+    service.$rootScope = $rootScope;
+    service.auth = auth;
+    service.store = store;
+    service.CURRENT_BACKEND = CURRENT_BACKEND;
+    service.$log = $log;
+    service.$location = $location;
+    service.jwtHelper = jwtHelper;
 
-            service.login = function(opts, ok, error) {
-                var options = angular.extend({
-                    closable: false
-                }, opts);
-                auth.signin(options, loginCallback(ok, error), error)
-            };
+    service.setLoginCallback();
+  }
 
-            service.authenticateUser = function() {
-              if (!auth.isAuthenticated) {
-                var token = store.get('id_token');
-                if (!token || jwtHelper.isTokenExpired(token)) {
-                  $location.path('/login');
-                } else {
-                  var profile = store.get('profile');
-                  auth.authenticate(profile, token);
-                  $rootScope.$broadcast('onCurrentUserId', profile.user_id);
-                }
-              }
+  setLoginCallback() {
+    let service = this;
 
-            }
+    if (service.CURRENT_BACKEND === 'firebase') {
+      service.loginCallback = function(onLogin, error) {
+        return function(profile, token) {
+          service.saveUserAndProfile(profile, token);
+          service.auth.getToken({
+            api: 'firebase'
+          }).then(function(token) {
+            service.store.set('userToken', token.id_token);
+            onLogin(profile, token.id_token);
+          }, function(err) {
+            error(err);
+            service.$log.error("Error getting Firebase token", err);
+          });
+        }
+      };
+    } else {
+      service.loginCallback = function(onLogin) {
+        return function(profile, token) {
+          service.saveUserAndProfile(profile, token);
+          service.store.set('userToken', token);
+          onLogin(profile, token);
+        }
+      };
+    }
+  }
 
-            service.logout = function() {
-                store.remove('id_token');
-                store.remove('profile');
-                store.remove('userToken');
-                $rootScope.$broadcast('onCurrentUserId', null);
-                $location.path('/login');
-            }
+  saveUserAndProfile(profile, token) {
+    let service = this;
 
-            service.getCurrentUser = function () {
-                return store.get('profile');
-            };
+    service.store.set('profile', profile);
+    service.$rootScope.$broadcast('onLogin', profile);
+    service.$rootScope.$broadcast('onCurrentUserId', profile.user_id);
+    service.store.set('id_token', token);
+  }
 
-            service.getCurrentUserId = function () {
-                var user = service.getCurrentUser();
-                return user ? user.user_id : null;
-            };
-    });
-;
+  login(opts, ok, error) {
+    let service = this;
+
+      var options = angular.extend({
+          closable: false
+      }, opts);
+      service.auth.signin(options, service.loginCallback(ok, error), error)
+  };
+
+  authenticateUser() {
+    let service = this;
+
+    if (!service.auth.isAuthenticated) {
+      var token = service.store.get('id_token');
+      if (!token || service.jwtHelper.isTokenExpired(token)) {
+        service.$location.path('/login');
+      } else {
+        var profile = service.store.get('profile');
+        service.auth.authenticate(profile, token);
+        service.$rootScope.$broadcast('onCurrentUserId', profile.user_id);
+      }
+    }
+  }
+
+  logout() {
+    let service = this;
+
+      service.store.remove('id_token');
+      service.store.remove('profile');
+      service.store.remove('userToken');
+      service.$rootScope.$broadcast('onCurrentUserId', null);
+      service.$location.path('/login');
+  }
+
+  getCurrentUser() {
+    let service = this;
+
+      return service.store.get('profile');
+  };
+
+  getCurrentUserId() {
+    let service = this;
+
+      var user = service.getCurrentUser();
+      return user ? user.user_id : null;
+  };
+}
+
+export default LoginService;

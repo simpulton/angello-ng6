@@ -13,13 +13,12 @@ class EndpointConfigService {
     service.backend = CURRENT_BACKEND;
 
     $rootScope.$on('onCurrentUserId', function(event, id){
-        userId = id;
+        service.userId = id;
     });
   }
 
   getUrl(model) {
     let service = this;
-
     return service.currentEndpoint.URI + service.currentEndpoint.root + service.userId + model;
   };
 

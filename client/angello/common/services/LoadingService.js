@@ -1,9 +1,12 @@
-angular.module('Angello.Common')
-    .service('LoadingService',
-        function ($rootScope) {
-            var service = this;
+class LoadingService {
+  constructor($rootScope) {
+    'ngInject';
+    this.$rootScope = $rootScope;
+  }
 
-            service.setLoading = function(loading) {
-                $rootScope.loadingView = loading;
-            };
-        });
+  setLoading(loading) {
+    this.$rootScope.loadingView = loading;
+  }
+}
+
+export default LoadingService;

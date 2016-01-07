@@ -1,7 +1,5 @@
 class AppController {
-  constructor() {
-    this.name = 'app';
-  }
+  constructor() {}
 }
 
 export default AppController;
