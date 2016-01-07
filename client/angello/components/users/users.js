@@ -12,7 +12,7 @@ let usersModule = angular.module('users', [
 
 .service('UsersModel', UsersModel)
 
-.directive('userstory', userStoryDirective)
+.directive('userstory', userStoryDirective.directiveFactory)
 
 .component('users', usersComponent);
 
