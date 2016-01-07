@@ -1,16 +1,34 @@
 class UserController {
-  constructor(
-     //  user, stories
-     $routeParams
-   ) {
+  constructor(UsersModel, StoriesModel, $routeParams, $q ) {
    'ngInject';
 
-    var vm = this;
+    let vm = this;
 
     vm.userId = $routeParams['userId'];
-    // vm.user = user.data;
+    vm.UsersModel = UsersModel;
+    vm.StoriesModel = StoriesModel;
+    vm.$q = $q;
 
-    // vm.stories = vm.getAssignedStories(vm.userId, stories);
+    vm.getStoriesForUser();
+  }
+
+  getStoriesForUser() {
+    let vm = this;
+    vm.$q.all([vm.getUser(), vm.getStories()])
+      .then(function ([user, stories]) {
+        vm.user = user.data;
+        vm.stories = vm.getAssignedStories(vm.userId, stories);
+      })
+  }
+
+  getUser() {
+    let vm = this;
+      return vm.UsersModel.fetch(vm.userId);
+  }
+
+  getStories() {
+    let vm = this;
+      return vm.StoriesModel.all();
   }
 
   getAssignedStories(userId, stories) {

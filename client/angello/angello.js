@@ -40,18 +40,7 @@ angular.module('angello', [
     })
     .when('/users/:userId', {
         template: '<user></user>',
-        requiresLogin: true,
-        resolve: {
-            user: function ($route, $routeParams, UsersModel) {
-                var userId = $route.current.params['userId']
-                           ? $route.current.params['userId']
-                           : $routeParams['userId'];
-                return UsersModel.fetch(userId);
-            },
-            stories: function ($rootScope, StoriesModel) {
-                return StoriesModel.all();
-            }
-        }
+        requiresLogin: true
     })
     .when('/login', {
         template: '<login></login>',
