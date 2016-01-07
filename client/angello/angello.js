@@ -11,7 +11,7 @@ import Components from './components/components';
 import AngelloComponent from './angello.component';
 import 'normalize.css';
 
-angular.module('app', [
+angular.module('angello', [
   ngRoute,
   ngMessages,
   'auth0',
@@ -174,4 +174,4 @@ angular.module('app', [
     {name: 'Spike'}
 ])
 
-.component('app', AngelloComponent);
+.component('angello', AngelloComponent);
