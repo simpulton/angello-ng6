@@ -1,15 +1,27 @@
 'use strict';
 
-xdescribe('Stories Model', function () {
+import _StoriesModel_ from './StoriesModel';
+import _EndpointConfigService_ from '../../common/services/EndpointConfigService';
+import _UtilsService_ from '../../common/services/UtilsService';
 
-    beforeEach(window.module('Angello.Common'));
+describe('Stories Model', function () {
+  let StoriesModel,
+      EndpointConfigService,
+      UtilsService,
+      CURRENT_BACKEND = 'firebase';
+
+    beforeEach(inject(($rootScope, $http) => {
+      EndpointConfigService = new _EndpointConfigService_($rootScope, CURRENT_BACKEND);
+      UtilsService = new _UtilsService_();
+      StoriesModel = new _StoriesModel_($http, EndpointConfigService, UtilsService);
+    }));
 
     afterEach(inject(function($httpBackend) {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     }));
 
-    it('Should get all', inject(function(StoriesModel, $httpBackend, $rootScope) {
+    it('Should get all', inject(function($httpBackend, $rootScope) {
         var response = [];
         $httpBackend.when(
             'GET', 'https://my-first-angello.firebaseio.com/clients/1/stories/.json'
@@ -26,7 +38,7 @@ xdescribe('Stories Model', function () {
         $rootScope.$digest();
     }));
 
-    it('Should fetch', inject(function(StoriesModel, $httpBackend, $rootScope) {
+    it('Should fetch', inject(function($httpBackend, $rootScope) {
         var response = {};
         $httpBackend.when(
             'GET', 'https://my-first-angello.firebaseio.com/clients/1/stories/1.json'
@@ -43,7 +55,7 @@ xdescribe('Stories Model', function () {
         $rootScope.$digest();
     }));
 
-    it('Should create', inject(function(StoriesModel, $httpBackend, $rootScope) {
+    it('Should create', inject(function($httpBackend, $rootScope) {
         var response = {};
         $httpBackend.when(
             'POST', 'https://my-first-angello.firebaseio.com/clients/1/stories/.json'
@@ -60,7 +72,7 @@ xdescribe('Stories Model', function () {
         $rootScope.$digest();
     }));
 
-    it('Should update', inject(function(StoriesModel, $httpBackend, $rootScope) {
+    it('Should update', inject(function($httpBackend, $rootScope) {
         var response = {};
         $httpBackend.when(
             'PUT', 'https://my-first-angello.firebaseio.com/clients/1/stories/1.json'
@@ -77,7 +89,7 @@ xdescribe('Stories Model', function () {
         $rootScope.$digest();
     }));
 
-    it('Should destroy', inject(function(StoriesModel, $httpBackend, $rootScope) {
+    it('Should destroy', inject(function($httpBackend, $rootScope) {
         var response = {};
         $httpBackend.when(
             'DELETE', 'https://my-first-angello.firebaseio.com/clients/1/stories/1.json'

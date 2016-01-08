@@ -1,4 +1,7 @@
-xdescribe('User Route', function () {
+import '../../angello';
+import ngRoute from 'angular-route';
+
+describe('User Route', function () {
     var $route,
         $rootScope,
         $location,
@@ -7,7 +10,8 @@ xdescribe('User Route', function () {
     // Inject and assign the $route and $rootScope services.
     // Put the template in template cache.
 
-    beforeEach(window.module('Angello'));
+    beforeEach(window.module('ngRoute'));
+    beforeEach(window.module('angello'));
 
     beforeEach(inject(function (_$location_, _$route_, $templateCache, _$rootScope_) {
         $route = _$route_;
@@ -21,8 +25,6 @@ xdescribe('User Route', function () {
         $location.path(url);
         $rootScope.$digest();
 
-        expect($route.current.controller).toEqual('LoginCtrl');
-        expect($route.current.controllerAs).toEqual('login');
-        expect($route.current.templateUrl).toEqual('src/angello/login/tmpl/login.html');
+        expect($route.current.locals.$template).toEqual('<login></login>');
     });
 });

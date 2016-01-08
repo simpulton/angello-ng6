@@ -1,12 +1,11 @@
 'use strict';
 
-xdescribe('Storyboard form', function() {
+import StoryboardController from './storyboard.controller';
+
+describe('Storyboard form', function() {
     var scope, ctrl;
 
-    beforeEach(window.module('Angello.Storyboard'));
-    beforeEach(window.module('Angello.Templates'));
-
-    beforeEach(inject(function($q, $rootScope, $controller, $templateCache, $compile) {
+    beforeEach(inject(function($q, $rootScope, $controller, $templateCache, $compile, $log) {
         var UsersModel = {
             all: function() {
                 var deferred = $q.defer();
@@ -23,21 +22,26 @@ xdescribe('Storyboard form', function() {
             }
         };
 
+        let STORY_STATUSES, STORY_TYPES;
+
         scope = $rootScope.$new();
 
-        ctrl = $controller('StoryboardCtrl', {
-            $scope: scope,
-            STORY_STATUSES: {},
-            STORY_TYPES: {},
-            UsersModel: UsersModel,
-            StoriesModel: StoriesModel
-        });
+        ctrl = new StoryboardController(
+          StoriesModel,
+          UsersModel,
+          scope,
+          $log,
+          STORY_STATUSES = {},
+          STORY_TYPES = {}
+        )
 
         scope.storyboard = ctrl;
 
-        var templateHtml = $templateCache.get('src/angello/storyboard/tmpl/storyboard.html');
+        var templateHtml = $templateCache.get('angello/components/storyboard/storyboard.html');
         var formElem = angular.element(templateHtml);
         $compile(formElem)(scope);
+
+        console.log(templateHtml);
 
         scope.$digest()
     }));
@@ -46,7 +50,7 @@ xdescribe('Storyboard form', function() {
         expect(ctrl.detailsForm.$invalid).toBeTruthy();
     });
 
-    it('should be valid with populated fields', function() {
+    xit('should be valid with populated fields', function() {
         ctrl.editedStory = {
             title: 'Title',
             status: 'To Do',

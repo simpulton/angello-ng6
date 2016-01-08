@@ -34,7 +34,15 @@ module.exports = function (config) {
           { test: /\.js/, exclude: [/app\/lib/, /node_modules/], loader: 'babel' },
           { test: /\.html/, loader: 'raw' },
           { test: /\.styl$/, loader: 'style!css!stylus' },
-          { test: /\.css$/, loader: 'style!css' }
+          { test: /\.css$/, loader: 'style!css' },
+          { test: /\.(eot|woff|woff2|svg|ttf)$/, loader: 'file-loader?name=fonts/[name].[ext]' },
+          { test: /\.(jpe?g|png|gif|svg)$/i, loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]' },
+          { test: /node_modules\/auth0-lock\/.*\.js$/, loaders: [
+            'transform-loader/cacheable?brfs',
+            'transform-loader/cacheable?packageify'
+          ]},
+          { test: /node_modules\/auth0-lock\/.*\.ejs$/, loader: 'transform-loader/cacheable?ejsify' },
+          { test: /\.json$/, loader: 'json-loader' }
         ]
       },
       plugins: [
@@ -51,7 +59,7 @@ module.exports = function (config) {
     },
 
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec'],
+    reporters: ['dots'],
 
     // web server port
     port: 9876,

@@ -3,7 +3,6 @@ import uiRouter from 'angular-ui-router';
 import storyboardComponent from './storyboard.component';
 import StoriesModel from './StoriesModel';
 import DragAndDrop from './DragAndDrop';
-console.log(DragAndDrop);
 
 let storyboardModule = angular.module('storyboard', [
   uiRouter
