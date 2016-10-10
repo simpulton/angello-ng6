@@ -67,6 +67,7 @@
     "yargs": "^3.9.0"
   },
   "scripts": {
+    "start": "gulp",
     "test": "karma start"
   },
   "keywords": [
